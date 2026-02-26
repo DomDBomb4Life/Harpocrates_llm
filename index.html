@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Future of AI: Continuous Learning • Dominik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --mit-red: #A31F34;
+        }
+        
+        .tail-container {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .slide {
+            scroll-snap-align: start;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mit-red {
+            color: #A31F34;
+        }
+
+        .bg-mit-red {
+            background-color: #A31F34;
+        }
+
+        .nav-dot {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-dot.active {
+            background-color: #A31F34;
+            width: 12px;
+            height: 12px;
+        }
+
+        .content-box {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
+<body class="tail-container bg-zinc-50 text-zinc-900 overflow-x-hidden">
+    <!-- Navigation bar (top) -->
+    <div class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-zinc-200 py-3 px-8 flex items-center justify-between text-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-[#A31F34] rounded flex items-center justify-center text-white font-bold text-xl leading-none pt-0.5">MIT</div>
+            <div>
+                <span class="font-semibold tracking-tight">The Future of AI</span>
+                <span class="text-zinc-500 text-xs block -mt-1">Continuous Learning</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-8 text-zinc-500">
+            <a href="#" onclick="goToSlide(1)" class="hover:text-[#A31F34] transition-colors">1. Title</a>
+            <a href="#" onclick="goToSlide(2)" class="hover:text-[#A31F34] transition-colors">2. What is Continuous Learning?</a>
+            <a href="#" onclick="goToSlide(3)" class="hover:text-[#A31F34] transition-colors">3. Pulkit Agrawal</a>
+            <a href="#" onclick="goToSlide(4)" class="hover:text-[#A31F34] transition-colors">4. The Challenge</a>
+            <a href="#" onclick="goToSlide(5)" class="hover:text-[#A31F34] transition-colors">5. Future Architecture</a>
+        </div>
+        <div class="flex items-center gap-2 text-xs uppercase tracking-widest text-zinc-400">
+            <span class="px-3 py-1 border border-zinc-300 rounded-full">5 MIN PRESENTATION</span>
+        </div>
+    </div>
+
+    <!-- Slides container -->
+    <div id="slides" class="h-screen w-screen snap-y snap-mandatory overflow-y-auto scroll-smooth">
+        
+        <!-- SLIDE 1: TITLE -->
+        <section id="slide-1" class="slide h-screen w-full flex items-center justify-center bg-gradient-to-br from-zinc-900 to-black relative">
+            <div class="absolute inset-0 bg-[url('https://picsum.photos/id/1015/1920/1080')] bg-cover bg-center opacity-40 mix-blend-overlay"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-black/80"></div>
+            
+            <div class="relative z-10 max-w-4xl mx-auto text-center px-8">
+                <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md text-white text-sm px-6 py-2 rounded-3xl mb-8 border border-white/20">
+                    <i class="fa-solid fa-brain"></i>
+                    <span class="tracking-widest">MIT RESEARCH HIGHLIGHT</span>
+                </div>
+                
+                <h1 class="heading-font text-7xl md:text-8xl font-semibold leading-none text-white tracking-tighter mb-6">
+                    THE FUTURE OF AI
+                </h1>
+                <p class="text-4xl md:text-5xl text-white/90 font-light tracking-tight mb-12">
+                    Continuous Learning: The Missing Piece for AGI
+                </p>
+                
+                <div class="flex items-center justify-center gap-8 text-white/80">
+                    <div class="text-left">
+                        <div class="text-sm uppercase tracking-widest">Presented by</div>
+                        <div class="text-3xl font-medium">Dominik</div>
+                    </div>
+                    <div class="h-12 w-px bg-white/30"></div>
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur flex items-center justify-center text-3xl">🤖</div>
+                        <div>
+                            <div class="text-lg font-medium">5-minute oral presentation</div>
+                            <div class="text-sm text-white/60">Arrow keys to navigate • Fullscreen F11</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- MIT seal bottom right -->
+            <div class="absolute bottom-8 right-8 text-white/30 text-xs flex items-center gap-2">
+                <span>MASSACHUSETTS INSTITUTE OF TECHNOLOGY</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: WHAT IS CONTINUOUS LEARNING? -->
+        <section id="slide-2" class="slide h-screen w-full flex items-center bg-white">
+            <div class="max-w-5xl mx-auto px-8 grid grid-cols-12 gap-12 items-center">
+                <div class="col-span-12 md:col-span-7">
+                    <div class="inline-block bg-[#A31F34] text-white text-xs px-4 py-2 rounded-full mb-6 font-medium tracking-widest">BACKGROUND &amp; IMPORTANCE</div>
+                    <h2 class="heading-font text-6xl leading-none font-semibold tracking-tighter text-zinc-900 mb-8">
+                        What is<br>Continuous Learning?
+                    </h2>
+                    
+                    <div class="space-y-6 text-lg text-zinc-700">
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 flex-shrink-0 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl">1</div>
+                            <div>
+                                <strong class="block">AGI = human-level intelligence across ALL tasks</strong>
+                                <div class="mt-1">Core human trait: learn from past experiences</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 flex-shrink-0 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl">2</div>
+                            <div>
+                                Current ML paradigm:<br>
+                                <span class="text-zinc-400 line-through">Train once on huge data → deploy static model</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-4">
+                            <div class="w-8 h-8 flex-shrink-0 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl">3</div>
+                            <div>
+                                <strong>Continuous / Continual Learning</strong><br>
+                                Model keeps updating parameters <span class="italic">after deployment</span> using tiny daily data
+                            </div>
+                        </div>
+                        
+                        <div class="pt-4 border-t text-base text-zinc-500">
+                            Biggest hurdle to AGI — being tackled by <span class="font-semibold text-[#A31F34]">Pulkit Agrawal</span> at MIT’s Improbable AI Lab
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Visual side -->
+                <div class="col-span-12 md:col-span-5">
+                    <div class="content-box rounded-3xl p-8 shadow-xl border border-zinc-100">
+                        <div class="bg-zinc-100 rounded-2xl p-6 text-center">
+                            <div class="text-7xl mb-4">🧠 → 🔄</div>
+                            <div class="uppercase text-xs tracking-widest text-zinc-500">Static vs Lifelong</div>
+                            <div class="grid grid-cols-2 gap-4 mt-6 text-sm">
+                                <div class="bg-white p-4 rounded-2xl">
+                                    <div class="font-mono text-[#A31F34]">TRAIN ONCE</div>
+                                    <div class="text-xs text-zinc-400">Huge compute</div>
+                                </div>
+                                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200">
+                                    <div class="font-mono text-emerald-600">UPDATE DAILY</div>
+                                    <div class="text-xs text-emerald-600">Tiny compute</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: PULKIT AGRAWAL -->
+        <section id="slide-3" class="slide h-screen w-full flex items-center bg-white">
+            <div class="max-w-6xl mx-auto px-8 grid grid-cols-12 gap-16 items-center">
+                <!-- Photo -->
+                <div class="col-span-12 md:col-span-5">
+                    <div class="rounded-3xl overflow-hidden shadow-2xl border border-zinc-100">
+                        <img src="https://people.csail.mit.edu/pulkitag/images/pulkit.jpg" 
+                             alt="Pulkit Agrawal" 
+                             class="w-full h-auto object-cover">
+                    </div>
+                    <div class="text-center mt-6 text-sm text-zinc-500">
+                        <a href="https://people.csail.mit.edu/pulkitag/" target="_blank" 
+                           class="hover:text-[#A31F34] flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            people.csail.mit.edu/pulkitag
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Bio -->
+                <div class="col-span-12 md:col-span-7">
+                    <div class="uppercase text-xs tracking-[3px] text-[#A31F34] font-medium mb-2">MEET THE RESEARCHER</div>
+                    <h2 class="heading-font text-6xl font-semibold tracking-tighter leading-none mb-2">Pulkit Agrawal</h2>
+                    <div class="text-2xl text-zinc-600 mb-8">
+                        Associate Professor<br>
+                        Department of Electrical Engineering &amp; Computer Science (EECS)<br>
+                        Director, <span class="font-semibold">Improbable AI Lab</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-8 text-base">
+                        <div>
+                            <div class="font-medium mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-award text-amber-500"></i> 
+                                KEY ACHIEVEMENTS
+                            </div>
+                            <ul class="space-y-3 text-zinc-600">
+                                <li class="flex items-start gap-3">
+                                    <span class="inline-block w-2 h-2 mt-2 bg-amber-400 rounded-full"></span>
+                                    2024 IEEE Early Career Award in Robotics
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="inline-block w-2 h-2 mt-2 bg-amber-400 rounded-full"></span>
+                                    Co-founder, SafelyYou (computer vision for dementia care — 40%+ fall reduction)
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <div class="font-medium mb-3">RESEARCH FOCUS</div>
+                            <div class="text-zinc-700 leading-relaxed">
+                                Robotics • Machine Learning • Perception<br>
+                                Building machines that automatically &amp; continuously learn from the real world.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 4: THE CHALLENGE -->
+        <section id="slide-4" class="slide h-screen w-full flex items-center bg-zinc-50">
+            <div class="max-w-5xl mx-auto px-8">
+                <div class="flex justify-between items-end mb-12">
+                    <div>
+                        <div class="uppercase text-xs tracking-widest text-rose-600 font-medium">THE PROBLEM</div>
+                        <h2 class="heading-font text-6xl font-semibold tracking-tighter">What’s Holding Continuous Learning Back?</h2>
+                    </div>
+                    <div class="text-right text-sm max-w-xs text-zinc-500">
+                        We have efficient updates… but they forget everything after a few tries
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-12 gap-8">
+                    <!-- Fine-tuning & SEAL -->
+                    <div class="col-span-12 md:col-span-7 bg-white rounded-3xl p-10 shadow">
+                        <div class="flex items-center gap-4 mb-8">
+                            <div class="px-4 py-1 bg-zinc-100 text-zinc-600 rounded-full text-sm font-medium">Fine-tuning (LoRA)</div>
+                            <div class="flex-1 h-px bg-zinc-200"></div>
+                            <div class="text-emerald-600 font-medium">0.00067% of full training compute</div>
+                        </div>
+                        
+                        <ul class="space-y-8">
+                            <li class="flex gap-6">
+                                <div class="font-mono text-3xl text-emerald-600 font-light">01</div>
+                                <div class="flex-1">
+                                    <div class="font-semibold">SEAL Framework (MIT Improbable AI Lab)</div>
+                                    <div class="text-zinc-600 mt-2">Model generates its own “self-edits” (like a student taking notes) using Reinforcement Learning</div>
+                                    <div class="mt-3 text-xs bg-amber-100 text-amber-700 px-3 py-1 inline-block rounded-full">Qwen-2.5-7B beats GPT-4.1 after only 2 RL iterations</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Catastrophic Forgetting -->
+                    <div class="col-span-12 md:col-span-5 bg-white rounded-3xl p-10 shadow flex flex-col">
+                        <div class="mt-auto">
+                            <div class="text-rose-600 text-sm font-medium tracking-widest mb-3">THE REAL PROBLEM</div>
+                            <div class="text-5xl leading-none font-light text-zinc-900">Catastrophic Forgetting</div>
+                            <div class="text-xl mt-8 text-zinc-700">
+                                Knowledge from earlier fine-tunes is almost completely lost after ~3 iterations
+                            </div>
+                            <div class="mt-8 pt-8 border-t text-sm text-zinc-500">
+                                We’re trying to update models that were never designed to be updated.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 5: FUTURE & SIGNIFICANCE -->
+        <section id="slide-5" class="slide h-screen w-full flex items-center bg-gradient-to-br from-zinc-900 to-black text-white">
+            <div class="max-w-5xl mx-auto px-8">
+                <div class="grid grid-cols-12 gap-12 items-center">
+                    <div class="col-span-12 md:col-span-7">
+                        <div class="uppercase text-xs tracking-widest text-emerald-400 mb-6">THE PATH FORWARD</div>
+                        <h2 class="heading-font text-6xl font-semibold tracking-tighter leading-none mb-12">
+                            We need a new architecture — inspired by the human brain
+                        </h2>
+                        
+                        <div class="space-y-8 text-xl">
+                            <div class="flex gap-6">
+                                <div class="text-emerald-400 text-5xl">🧠</div>
+                                <div>
+                                    Compartmentalized domains<br>
+                                    <span class="text-white/60 text-lg">Motor • Vision • Language • Spatial</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="text-emerald-400 text-5xl">🔗</div>
+                                <div>
+                                    Adaptive connections<br>
+                                    <span class="text-white/60 text-lg">Add / remove synapses on the fly</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="text-emerald-400 text-5xl">🌐</div>
+                                <div>
+                                    Super-nodes connecting domains → cohesive thinking
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-span-12 md:col-span-5">
+                        <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-10 border border-white/10">
+                            <div class="text-emerald-400 text-sm mb-4">WHY THIS MATTERS FOR ALL OF US</div>
+                            <div class="text-3xl leading-tight font-light">
+                                True lifelong learning AI<br>
+                                Robots that improve every day<br>
+                                Personal assistants that actually remember you
+                            </div>
+                            <div class="mt-12 pt-12 border-t border-white/20 text-sm opacity-70">
+                                “We got this far with ML by taking inspiration from the human brain.<br>
+                                <span class="font-medium">Might as well go all the way.</span>”
+                            </div>
+                            <div class="text-xs mt-8 text-white/40">— Dominik (inspired by Pulkit Agrawal’s work)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer on last slide -->
+            <div class="absolute bottom-8 left-8 right-8 text-xs text-white/40 flex justify-between items-center">
+                <div>References: Zweiger et al. (2025) arXiv:2506.10943 • Improbable AI Lab</div>
+                <div class="flex items-center gap-6">
+                    <button onclick="goToSlide(4)" 
+                            class="flex items-center gap-2 hover:text-white transition-colors">
+                        <i class="fa-solid fa-arrow-left"></i> Prev
+                    </button>
+                    <div class="text-white/30">•</div>
+                    <button onclick="window.location.reload()" 
+                            class="flex items-center gap-2 hover:text-white transition-colors">
+                        Restart <i class="fa-solid fa-arrow-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Bottom navigation dots -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex gap-3">
+        <button onclick="goToSlide(1)" class="nav-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white" id="dot-1"></button>
+        <button onclick="goToSlide(2)" class="nav-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white" id="dot-2"></button>
+        <button onclick="goToSlide(3)" class="nav-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white" id="dot-3"></button>
+        <button onclick="goToSlide(4)" class="nav-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white" id="dot-4"></button>
+        <button onclick="goToSlide(5)" class="nav-dot w-3 h-3 rounded-full bg-white/60 hover:bg-white" id="dot-5"></button>
+    </div>
+
+    <script>
+        // Tailwind script already loaded
+        function initTailwind() {
+            // Already initialized via CDN
+        }
+
+        let currentSlide = 1;
+        const totalSlides = 5;
+
+        function showSlide(n) {
+            currentSlide = n;
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                slide.classList.toggle('hidden', index + 1 !== n);
+            });
+            
+            // Update dots
+            for (let i = 1; i <= totalSlides; i++) {
+                const dot = document.getElementById(`dot-${i}`);
+                if (dot) {
+                    dot.classList.toggle('active', i === n);
+                }
+            }
+        }
+
+        function goToSlide(n) {
+            showSlide(n);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 1) showSlide(currentSlide - 1);
+            } else if (e.key === 'f' || e.key === 'F') {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen();
+                } else {
+                    document.exitFullscreen();
+                }
+            }
+        });
+
+        // Initialize
+        window.onload = function() {
+            initTailwind();
+            showSlide(1);
+            
+            // Make all slides visible initially then hide except first
+            document.querySelectorAll('.slide').forEach((s, i) => {
+                if (i !== 0) s.classList.add('hidden');
+            });
+            
+            // Click anywhere on slide to go next (except last)
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.addEventListener('click', () => {
+                    if (currentSlide < totalSlides) {
+                        showSlide(currentSlide + 1);
+                    }
+                });
+            });
+        };
+    </script>
+</body>
+</html>
