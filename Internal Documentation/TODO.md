@@ -1,12 +1,5 @@
 # Education
-
-* Learn how to use Langchain
-
-
-* Research the Legal ramifications of collection this data
-
-* do not collect religious information
-
-* look at mainly their social medio posts because that is something that they can control
-
-
+- Learn how to use LangChain
+- Research the legal ramifications of collecting this data
+- Do not collect religious information
+- Focus primarily on social media posts because that is something they can control

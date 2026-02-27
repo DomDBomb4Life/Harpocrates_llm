@@ -1,95 +1,79 @@
-# Step 1
-Collect a data set of students of the form (first name, last name, class year) and store it in a CSV file.
+# Internal Documentation/v1_brainstorm.md
+# Step 1 – Seed Dataset
+Collect a CSV dataset of MIT students in the exact form `(first_name, last_name, class_year)`.  
+This becomes the initial input queue for the entire pipeline. No other fields are required at ingest.
 
-# Step 2
-For each student in the data set, apply LLM_policy_1 to determine their imediate family members
+# Step 2 – Family Tree Construction (LLM_Policy_1)
+For each student in the dataset, invoke LLM_Policy_1 to extract immediate family members and either create a new family_file or merge into an existing one (students sharing a family share the identical family_file on disk).
 
-* We are essentially createing a file on the family of each student in the data set (students in the same family will have the same family file)
-
-* An secondary iteration of this step will apply LLM_policy_1 on each family member in order to grow the family tree and add that data to the family_file
+Secondary iteration: re-apply LLM_Policy_1 to every newly discovered family member to grow the tree outward. This process is fully iterative and can be run multiple times without side effects.
 
 ## family_file
-This data structue will contain the 
+Central persistent record for one family.  
+Stored as a single JSON/Parquet document keyed by a deterministic family_id (e.g., hash of sorted member names + earliest class year).  
+Contains:
+- A map of `member_id` → `personal_data`
+- A separate `relationship_edges` array for inverse links (parent/child, sibling, etc.)
 
-## LLM_policy_1 (p1)
-* This policy should be able to function with or without the personal_data collected in through LLM_policy_2
+## LLM_Policy_1 (p1)
+Inputs: student name + class_year OR an existing family_file  
+Outputs: list of candidate family members (with confidence scores) to merge/append  
 
-* if given the addition of personal_data the data collected in LLM_policy_2, p1 should be able to provide a better output (more family members). Although this is only a theory, we will study the results of p1 with and without the personal_data to see if this is the case. this study will be the one of the fudmental basis of the graph_df
+Key invariants:
+- Functions with or without any personal_data already present
+- When personal_data from LLM_Policy_2 is available, it returns higher-recall family members (this differential is the empirical basis for the future graph_df ablation study)
+- Strictly append-only: never overwrites, deletes, or corrupts existing family_file or personal_data blocks
+- Idempotent: same input always produces the same merge result
 
-* This needs to be highly stable no matter what stage in the program it is called is. It needs to not corrupt the family_file or personal_data, only add information
+# Step 3 – Profile Enrichment (LLM_Policy_2)
+Develop LLM_Policy_2 to consume a family_file (and any existing personal_data) and output structured updates in the personal_data schema.
 
+Two supported execution modes (chosen at runtime):
+- Per-member mode: run independently on each member (modular, token-efficient, easy parallelization)
+- Whole-family mode: feed the entire family_file at once (leverages inter-member context for higher accuracy; theory is that richer connected personal_data will surface more graph nodes)
 
-
-# Step 3
-We need to develop a llm policy that can is able to input use family_file (and existing personal_data) to output data in the structure of personal_data using LLM_policy_2
-
-This could work in a number of ways:
-* We apply LLM_policy_2 to each member of the family in family_file. This is a highly modular and token efficient system
-
-* We apply LLM_policy_2 to the entirety of family file. This uses the connections that the personal_data of each family member would be able to form to provide better data. Theory: If we add more information to the personal_data then we will be able to identify more nodes of the graph_df.
-
-
-
-## LLM_policy_2
-The purpose of LLM_policy_2 is to generate or expand upon the personal_data for an individual or family file
-
-* 
-
+## LLM_Policy_2
+Purpose: generate or expand personal_data for any individual or entire family_file.  
+Inputs: family_file (full or partial) + optional target member_id  
+Outputs: updated personal_data blocks (delta only) to be merged back idempotently.
 
 ## personal_data
-This is a data structure contained within family_file for each member of the family
+Nested structure inside family_file for each family member.  
+Supports two distinct linking mechanisms:
+1. Shared-asset linking (household-level): updates propagate bidirectionally to all linked members (e.g., same address, shared trusts)
+2. Relationship linking (inverse-aware): edges stored separately so parent/child or sibling links remain distinct and non-duplicative
 
-* If members in family_file share information (such as live in same household and share assets) then these data structures should be linked. Linking not only means they are updated together but also means that when attempting to apply LLM_policy_2 to a family member you should take into account the personal_data from any member that is linked to the member in question (or if we are using data from all family members then you should consider the data from linked members differently)
-
-* members will also be linked by their relationships. This link is different b/c the data is not going to be identical so the data structure will need to take into account inverse relationships.
-
-### High level catagories of columns (not the actual columns)
-
+### High-level categories of columns (schema skeleton – not exhaustive)
 #### Assets
-
-
-
 #### Early Life
-* How did they obtain their status
-
+- Status acquisition path
 #### Relationships
-* Siblings
-* parents
-* freinds
-
+- Siblings
+- Parents
+- Friends
 #### Education
-
 #### Career
-* industry
-* Salary
-* title
-* Company
-* history
-* internships
-
+- Industry
+- Salary range
+- Title
+- Company
+- Employment history
+- Internships
 #### Affiliations
-* Orginizations
-* Non-profits
-* trusts
-* start-ups
-* projects
-
-#### Internt Accounts
-* Social Media: Linkedin, Instagram, Facebook
-* Emails: Google, outlook, icloud, institution, work
-* Github
-
+- Organizations
+- Non-profits
+- Trusts
+- Start-ups
+- Projects
+#### Internet Accounts
+- Social Media (LinkedIn, Instagram, Facebook)
+- Emails (Google, Outlook, iCloud, institutional, work)
+- GitHub
 #### MIT Specific
-* major
-* classes
-* research
-* 
-
-
-
-
+- Major
+- Classes taken
+- Research groups / theses
 
 # Future Works
-
-## Graph Theory Repersentation of a digital footprint (graph_df)
-tbd - will not be implented in the MVP
+## Graph Theory Representation of a digital footprint (graph_df)
+TBD – explicitly out of scope for MVP. Will be built on top of the family_file + relationship_edges once the two policies are stable and idempotent.
