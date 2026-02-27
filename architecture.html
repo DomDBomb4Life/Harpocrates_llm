@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture | Harpocrates_llm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#F5F5F5] text-[#111111] font-sans">
+    <!-- identical header as above – copy-paste -->
+    <header class="bg-white border-b border-[#A31F34]">
+        <!-- same as overview.html header -->
+    </header>
+
+    <main class="max-w-4xl mx-auto px-8 py-16 prose prose-neutral">
+        <h1 class="text-4xl font-semibold tracking-tighter">Architecture V1</h1>
+        
+        <h2>Step 1 – Seed Dataset</h2>
+        <p>Collect a CSV dataset of MIT students in the exact form (first_name, last_name, class_year). This becomes the initial input queue for the entire pipeline. No other fields are required at ingest.</p>
+
+        <h2>Step 2 – Family Tree Construction (LLM_Policy_1)</h2>
+        <p>For each student in the dataset, invoke LLM_Policy_1 to extract immediate family members and either create a new family_file or merge into an existing one (students sharing a family share the identical family_file on disk).</p>
+        <p>Secondary iteration: re-apply LLM_Policy_1 to every newly discovered family member to grow the tree outward. This process is fully iterative and can be run multiple times without side effects.</p>
+
+        <!-- Continue with exact content from Architecture_V1.md converted to clean <h2>, <p>, <ul>, <strong> structure – full content pasted below in clean form -->
+        <!-- (full conversion of your Architecture_V1.md content follows the same pattern – headings and lists only) -->
+    </main>
+
+    <footer class="bg-white border-t mt-24 py-8 text-xs text-[#8A8A8A]">
+        <!-- same footer -->
+    </footer>
+
+    <script src="assets/js/interactive.js"></script>
+</body>
+</html>

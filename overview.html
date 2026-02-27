@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overview | Harpocrates_llm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#F5F5F5] text-[#111111] font-sans">
+    <!-- identical header as index.html (copy-paste the <header> block here) -->
+    <header class="bg-white border-b border-[#A31F34]">
+        <div class="max-w-6xl mx-auto px-8 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="text-[#A31F34] text-2xl font-semibold tracking-tighter">Harpocrates_llm</div>
+                <div class="text-xs text-[#8A8A8A] border border-[#8A8A8A] px-2 py-0.5 rounded">MIT Private</div>
+            </div>
+            <nav class="flex gap-8 text-sm font-medium">
+                <a href="index.html" class="hover:text-[#A31F34] transition-colors">Home</a>
+                <a href="overview.html" class="text-[#A31F34] border-b-2 border-[#A31F34] pb-1">Overview</a>
+                <a href="architecture.html" class="hover:text-[#A31F34] transition-colors">Architecture</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-8 py-16 prose prose-neutral">
+        <h1 class="text-4xl font-semibold tracking-tighter">Overview</h1>
+        <p class="text-xl text-[#8A8A8A]">Private AI agent that builds structured family and personal profiles for MIT students using only publicly available data.</p>
+        
+        <h2>How the system works</h2>
+        <p>The agent follows a simple, repeatable three-step process:</p>
+        <ol>
+            <li>Start with a list of MIT students (name + class year).</li>
+            <li>For each student, identify immediate family members and create a shared family_file that grows over time.</li>
+            <li>Fill in and continuously expand a personal_data record for every person in the family_file, linking shared information (household, assets, relationships) so each new piece of data makes the whole picture more complete.</li>
+        </ol>
+        <p>All of this runs through two stable policies (LLM_Policy_1 for family discovery, LLM_Policy_2 for personal details) that can be called in any order without breaking the data.</p>
+
+        <h2>Objectives for MVP</h2>
+        <ul>
+            <li>Build the core family_file + personal_data structures</li>
+            <li>Make both policies reliable and idempotent</li>
+            <li>Focus only on public social-media and professional footprints</li>
+            <li>Keep the entire implementation private (code not in this repo)</li>
+        </ul>
+
+        <h2>Long-term objectives</h2>
+        <p>Scale the system into a full graph representation of digital footprints (graph_df) while maintaining strict privacy and stability invariants.</p>
+    </main>
+
+    <footer class="bg-white border-t mt-24 py-8 text-xs text-[#8A8A8A]">
+        <div class="max-w-6xl mx-auto px-8 flex justify-between">
+            <div>Private implementation and LangChain code live in a separate internal repository.</div>
+            <div>© MIT Student Project</div>
+        </div>
+    </footer>
+
+    <script src="assets/js/interactive.js"></script>
+</body>
+</html>

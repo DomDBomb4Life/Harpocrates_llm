@@ -1,4 +1,4 @@
-# Internal Documentation/v1_brainstorm.md
+# Architecture_V1
 # Step 1 – Seed Dataset
 Collect a CSV dataset of MIT students in the exact form `(first_name, last_name, class_year)`.  
 This becomes the initial input queue for the entire pipeline. No other fields are required at ingest.

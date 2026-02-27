@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harpocrates_llm</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-[#F5F5F5] text-[#111111] font-sans">
+    <header class="bg-white border-b border-[#A31F34]">
+        <div class="max-w-6xl mx-auto px-8 py-5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="text-[#A31F34] text-2xl font-semibold tracking-tighter">Harpocrates_llm</div>
+                <div class="text-xs text-[#8A8A8A] border border-[#8A8A8A] px-2 py-0.5 rounded">MIT Private</div>
+            </div>
+            <nav class="flex gap-8 text-sm font-medium">
+                <a href="index.html" class="text-[#A31F34] border-b-2 border-[#A31F34] pb-1">Home</a>
+                <a href="overview.html" class="hover:text-[#A31F34] transition-colors">Overview</a>
+                <a href="architecture.html" class="hover:text-[#A31F34] transition-colors">Architecture</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-8 py-16">
+        <div class="max-w-2xl">
+            <h1 class="text-5xl font-semibold tracking-tighter leading-none mb-6">Private AI agent for structured family and personal profiles</h1>
+            <p class="text-xl text-[#8A8A8A] mb-10">MIT student project that builds linked family_files and personal_data records from public sources only.</p>
+            
+            <div class="flex gap-4">
+                <a href="overview.html" class="bg-[#A31F34] text-white px-8 py-4 font-medium text-sm tracking-wider hover:bg-black transition-colors">VIEW OVERVIEW</a>
+                <a href="architecture.html" class="border border-[#111111] px-8 py-4 font-medium text-sm tracking-wider hover:bg-[#111111] hover:text-white transition-colors">VIEW ARCHITECTURE</a>
+            </div>
+        </div>
+
+        <div class="mt-24 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div>
+                <div class="uppercase text-xs tracking-widest text-[#8A8A8A] mb-2">Step 1</div>
+                <div class="font-medium">Seed Dataset</div>
+                <div class="text-sm text-[#8A8A8A]">MIT student CSV input</div>
+            </div>
+            <div>
+                <div class="uppercase text-xs tracking-widest text-[#8A8A8A] mb-2">Step 2</div>
+                <div class="font-medium">Family Tree Construction</div>
+                <div class="text-sm text-[#8A8A8A]">LLM_Policy_1 + family_file merging</div>
+            </div>
+            <div>
+                <div class="uppercase text-xs tracking-widest text-[#8A8A8A] mb-2">Step 3</div>
+                <div class="font-medium">Profile Enrichment</div>
+                <div class="text-sm text-[#8A8A8A]">LLM_Policy_2 with bidirectional linking</div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t mt-24 py-8 text-xs text-[#8A8A8A]">
+        <div class="max-w-6xl mx-auto px-8 flex justify-between">
+            <div>Private implementation and LangChain code live in a separate internal repository.</div>
+            <div>© MIT Student Project</div>
+        </div>
+    </footer>
+
+    <script src="assets/js/interactive.js"></script>
+</body>
+</html>
