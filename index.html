@@ -13,17 +13,18 @@
   --accent:#00e0a0;--accent-dim:rgba(0,224,160,.15);--accent-glow:rgba(0,224,160,.06);
   --red:#ff3355;--red-dim:rgba(255,51,85,.12);
   --blue:#3388ff;--blue-dim:rgba(51,136,255,.1);
+  --sidebar-w:220px;
 }
 html{scroll-behavior:smooth;background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden}
 body{background:var(--black);min-height:100vh}
 ::selection{background:var(--accent);color:var(--black)}
 
-/* NOISE OVERLAY */
+/* NOISE */
 body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
   opacity:.4}
 
-/* GRID BACKGROUND */
+/* GRID BG */
 .grid-bg{position:fixed;inset:0;z-index:0;
   background-image:
     linear-gradient(rgba(0,224,160,.03) 1px,transparent 1px),
@@ -38,171 +39,207 @@ body::before{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
 @keyframes scanMove{0%{transform:translateY(-4px)}100%{transform:translateY(100vh)}}
 
 /* SCROLLBAR */
-::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:var(--black)}
 ::-webkit-scrollbar-thumb{background:var(--ghost);border-radius:3px}
 ::-webkit-scrollbar-thumb:hover{background:var(--muted)}
 
-/* UTILITY */
-.container{max-width:1200px;margin:0 auto;padding:0 40px}
+/* ===== TOP NAV ===== */
+.top-nav{position:fixed;top:0;left:0;right:0;z-index:200;
+  height:56px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 40px;
+  background:rgba(5,5,8,.85);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.04)}
+.top-nav .logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;letter-spacing:4px;color:var(--white);text-transform:uppercase;display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none}
+.top-nav .logo .dot{width:7px;height:7px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,224,160,.4)}50%{box-shadow:0 0 0 8px rgba(0,224,160,0)}}
+.top-nav .page-links{display:flex;gap:28px}
+.top-nav .page-links a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s;cursor:pointer;padding:4px 0;position:relative}
+.top-nav .page-links a:hover,.top-nav .page-links a.active-page{color:var(--accent)}
+.top-nav .page-links a.active-page::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--accent)}
+
+/* ===== SIDE NAV ===== */
+.side-nav{position:fixed;left:0;top:56px;bottom:0;width:var(--sidebar-w);z-index:150;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 28px;
+  border-right:1px solid rgba(255,255,255,.03);
+  transition:opacity .4s,transform .4s}
+.side-nav.hidden{opacity:0;pointer-events:none;transform:translateX(-20px)}
+.side-nav-item{display:block;padding:10px 0;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ghost);text-decoration:none;cursor:pointer;
+  transition:font-size .45s cubic-bezier(.16,1,.3,1),color .4s,padding-left .4s;
+  border-left:2px solid transparent;padding-left:0;white-space:nowrap}
+.side-nav-item.active{font-size:14px;color:var(--accent);padding-left:14px;border-left-color:var(--accent)}
+.side-nav-item:hover:not(.active){color:var(--dim)}
+
+/* ===== PAGES ===== */
+.page{display:none;opacity:0;transition:opacity .4s}
+.page.active{display:block;opacity:1}
+
+/* Homepage gets sidebar offset */
+#page-home .home-content{margin-left:var(--sidebar-w)}
+.page:not(#page-home) .inner-page{margin-left:0;max-width:900px;margin:0 auto;padding:120px 40px 80px}
+
+/* ===== GENERAL ===== */
+.container{max-width:1100px;margin:0 auto;padding:0 40px}
 .mono{font-family:'JetBrains Mono',monospace}
 .serif{font-family:'Instrument Serif',serif}
 .accent{color:var(--accent)}
-.red{color:var(--red)}
 .dim{color:var(--dim)}
-.muted{color:var(--muted)}
 
-/* FADE-IN SYSTEM */
-.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-.reveal-delay-4{transition-delay:.4s}
-.reveal-delay-5{transition-delay:.5s}
+.reveal-d1{transition-delay:.1s}.reveal-d2{transition-delay:.2s}.reveal-d3{transition-delay:.3s}.reveal-d4{transition-delay:.35s}
 
-/* ========== NAV ========== */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;
-  padding:20px 40px;display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(180deg,var(--black),transparent);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-nav .logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;letter-spacing:4px;color:var(--white);text-transform:uppercase;display:flex;align-items:center;gap:12px}
-nav .logo .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,224,160,.4)}50%{box-shadow:0 0 0 8px rgba(0,224,160,0)}}
-nav .nav-links{display:flex;gap:32px}
-nav .nav-links a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--dim);text-decoration:none;transition:color .3s}
-nav .nav-links a:hover{color:var(--accent)}
-nav .status{display:flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted)}
-nav .status .live{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+/* ===== SECTIONS (100vh) ===== */
+.full-section{min-height:100vh;display:flex;align-items:center;position:relative;padding:80px 0}
 
-/* ========== HERO ========== */
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding-top:100px}
-.hero-content{position:relative;z-index:2;width:100%}
+/* ===== HERO ===== */
+.hero-section{padding-top:56px}
+#hero-canvas{position:absolute;top:0;right:-5%;width:55%;height:100%;z-index:0;opacity:.45}
+.hero-inner{position:relative;z-index:2;width:100%}
 .hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--accent);margin-bottom:32px;display:flex;align-items:center;gap:16px}
 .hero-eyebrow::before{content:'';width:40px;height:1px;background:var(--accent)}
-.hero h1{font-family:'Instrument Serif',serif;font-size:clamp(52px,8vw,110px);line-height:.92;color:var(--white);margin-bottom:32px;font-weight:400;max-width:900px}
-.hero h1 em{font-style:italic;color:var(--accent)}
-.hero-sub{font-size:18px;line-height:1.7;color:var(--dim);max-width:560px;margin-bottom:48px}
-.hero-cta{display:inline-flex;align-items:center;gap:12px;padding:14px 32px;border:1px solid var(--accent);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .4s;position:relative;overflow:hidden}
+.hero-section h1{font-family:'Instrument Serif',serif;font-size:clamp(48px,7vw,100px);line-height:.92;color:var(--white);margin-bottom:32px;font-weight:400;max-width:800px}
+.hero-section h1 em{font-style:italic;color:var(--accent)}
+.hero-sub{font-size:17px;line-height:1.7;color:var(--dim);max-width:520px;margin-bottom:48px}
+.hero-cta{display:inline-flex;align-items:center;gap:12px;padding:14px 32px;border:1px solid var(--accent);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .4s;position:relative;overflow:hidden;cursor:pointer}
 .hero-cta::before{content:'';position:absolute;inset:0;background:var(--accent);transform:translateX(-101%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
 .hero-cta:hover::before{transform:translateX(0)}
 .hero-cta:hover{color:var(--black)}
-.hero-cta span{position:relative;z-index:1}
-.hero-cta svg{position:relative;z-index:1;transition:transform .3s}
+.hero-cta span,.hero-cta svg{position:relative;z-index:1}
 .hero-cta:hover svg{transform:translateX(4px)}
 
-/* HERO CANVAS */
-#hero-canvas{position:absolute;top:0;right:-10%;width:60%;height:100%;z-index:1;opacity:.5}
+/* SCROLLING BANNER */
+.scroll-banner{padding:20px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border);overflow:hidden;position:relative;z-index:2}
+.scroll-track{display:flex;white-space:nowrap;animation:bannerScroll 30s linear infinite}
+.scroll-track span{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--ghost);padding:0 48px;flex-shrink:0}
+@keyframes bannerScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
-/* ========== THREAT BANNER ========== */
-.threat-banner{padding:0 0 20px;position:relative;overflow:hidden}
-.threat-track{display:flex;white-space:nowrap;animation:scroll 25s linear infinite}
-.threat-track span{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--ghost);padding:0 60px;flex-shrink:0}
-@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* ===== SECTION TYPOGRAPHY ===== */
+.sec-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.sec-label::before{content:'';width:28px;height:1px;background:var(--accent)}
+.sec-title{font-family:'Instrument Serif',serif;font-size:clamp(34px,4.5vw,58px);color:var(--white);line-height:1.1;margin-bottom:20px;font-weight:400;max-width:650px}
+.sec-desc{font-size:15px;line-height:1.8;color:var(--dim);max-width:500px}
 
-/* ========== METRICS ========== */
-.metrics{padding:80px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
-.metrics-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border)}
-.metric{background:var(--black);padding:40px;text-align:center}
-.metric-value{font-family:'Instrument Serif',serif;font-size:48px;color:var(--white);line-height:1}
-.metric-value .unit{font-size:24px;color:var(--accent)}
-.metric-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-top:12px}
-
-/* ========== SECTION COMMON ========== */
-section{padding:140px 0;position:relative}
-.section-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:24px;display:flex;align-items:center;gap:16px}
-.section-label::before{content:'';width:32px;height:1px;background:var(--accent)}
-.section-title{font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,64px);color:var(--white);line-height:1.1;margin-bottom:24px;font-weight:400;max-width:700px}
-.section-desc{font-size:16px;line-height:1.8;color:var(--dim);max-width:520px}
-
-/* ========== ARCHITECTURE PIPELINE ========== */
+/* ===== PIPELINE ===== */
 .pipeline-section{background:var(--deep)}
-.pipeline-graphic{margin-top:80px;position:relative}
-
+.pipeline-graphic{margin-top:64px;position:relative}
 .pipeline-flow{display:flex;gap:0;position:relative}
-.pipeline-step{flex:1;position:relative;padding:48px 32px 48px 32px;border:1px solid var(--border);background:var(--black);transition:all .5s}
+.pipeline-step{flex:1;padding:44px 28px;border:1px solid var(--border);background:var(--black);transition:all .5s}
 .pipeline-step:hover{border-color:var(--accent);background:var(--surface)}
-.pipeline-step:hover .step-number{color:var(--accent)}
+.pipeline-step:hover .step-num{color:var(--accent)}
+.step-num{font-family:'JetBrains Mono',monospace;font-size:56px;font-weight:700;color:var(--ghost);line-height:1;margin-bottom:16px;transition:color .5s}
+.step-name{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+.step-title{font-family:'Instrument Serif',serif;font-size:26px;color:var(--white);margin-bottom:14px;font-weight:400}
+.step-desc{font-size:13px;line-height:1.7;color:var(--dim)}
 
-.step-number{font-family:'JetBrains Mono',monospace;font-size:64px;font-weight:700;color:var(--ghost);line-height:1;margin-bottom:20px;transition:color .5s}
-.step-name{font-family:'JetBrains Mono',monospace;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
-.step-title{font-family:'Instrument Serif',serif;font-size:28px;color:var(--white);margin-bottom:16px;font-weight:400}
-.step-desc{font-size:14px;line-height:1.7;color:var(--dim)}
-
-/* ARROWS BETWEEN STEPS */
-.pipeline-arrow{position:absolute;top:50%;width:40px;height:40px;transform:translate(-50%,-50%);z-index:5;display:flex;align-items:center;justify-content:center}
+.pipeline-arrow{position:absolute;top:50%;width:36px;height:36px;transform:translate(-50%,-50%);z-index:5;display:flex;align-items:center;justify-content:center}
 .pipeline-arrow svg{color:var(--accent);filter:drop-shadow(0 0 6px rgba(0,224,160,.3))}
-.arrow-1{left:33.33%}.arrow-2{left:66.66%}
+.arrow-pos-1{left:33.33%}.arrow-pos-2{left:66.66%}
 
-/* DATA FLOW ANIMATION */
 .data-flow{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden}
-.data-particle{position:absolute;width:4px;height:4px;background:var(--accent);border-radius:50%;opacity:0;animation:flowRight 3s linear infinite;box-shadow:0 0 8px var(--accent)}
-@keyframes flowRight{0%{left:-2%;opacity:0;top:30%}10%{opacity:1}90%{opacity:1}100%{left:102%;opacity:0;top:70%}}
+.data-dot{position:absolute;width:3px;height:3px;background:var(--accent);border-radius:50%;opacity:0;animation:dotFlow 3.5s linear infinite;box-shadow:0 0 6px var(--accent)}
+@keyframes dotFlow{0%{left:-1%;opacity:0;top:35%}10%{opacity:.8}90%{opacity:.8}100%{left:101%;opacity:0;top:65%}}
 
-/* ========== POLICIES SECTION ========== */
-.policies{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:80px;background:var(--border)}
-.policy-card{background:var(--black);padding:56px 48px;position:relative;overflow:hidden}
+/* ===== POLICIES ===== */
+.policies-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:64px;background:var(--border)}
+.policy-card{background:var(--black);padding:48px 40px;position:relative;overflow:hidden}
 .policy-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;transition:opacity .5s}
 .policy-card:hover::before{opacity:1}
-.policy-id{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
-.policy-name{font-family:'Instrument Serif',serif;font-size:32px;color:var(--white);margin-bottom:16px;font-weight:400}
-.policy-desc{font-size:14px;line-height:1.8;color:var(--dim);margin-bottom:32px}
-.policy-tags{display:flex;flex-wrap:wrap;gap:8px}
-.tag{padding:6px 14px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;transition:all .3s}
-.policy-card:hover .tag{border-color:var(--ghost);color:var(--dim)}
+.policy-id{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.policy-name{font-family:'Instrument Serif',serif;font-size:28px;color:var(--white);margin-bottom:14px;font-weight:400}
+.policy-desc{font-size:13px;line-height:1.8;color:var(--dim);margin-bottom:28px}
+.policy-props{display:flex;flex-wrap:wrap;gap:8px}
+.prop{padding:5px 12px;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);text-transform:uppercase;transition:all .3s}
+.policy-card:hover .prop{border-color:var(--ghost);color:var(--dim)}
 
-/* ========== SCHEMA SECTION ========== */
-.schema-visual{margin-top:80px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:var(--border)}
-.schema-col{background:var(--black);padding:40px}
-.schema-col-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
-.schema-item{padding:10px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:13px;color:var(--dim);display:flex;align-items:center;gap:10px;transition:color .3s}
-.schema-item:hover{color:var(--white)}
-.schema-item::before{content:'';width:4px;height:4px;background:var(--ghost);border-radius:1px;flex-shrink:0;transition:background .3s}
-.schema-item:hover::before{background:var(--accent)}
+/* ===== SCHEMA ===== */
+.schema-section{background:var(--deep)}
+.schema-grid{margin-top:64px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;background:var(--border)}
+.schema-col{background:var(--black);padding:36px}
+.schema-col-head{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.schema-row{padding:9px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:13px;color:var(--dim);display:flex;align-items:center;gap:10px;transition:color .3s}
+.schema-row:hover{color:var(--white)}
+.schema-row::before{content:'';width:4px;height:4px;background:var(--ghost);border-radius:1px;flex-shrink:0;transition:background .3s}
+.schema-row:hover::before{background:var(--accent)}
 
-/* ========== GRAPH SECTION ========== */
-.graph-section{background:var(--deep);position:relative;overflow:hidden}
-#graph-canvas{position:absolute;inset:0;z-index:0;opacity:.3}
-.graph-content{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.graph-text{max-width:480px}
-.graph-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 16px;border:1px solid var(--red-dim);background:var(--red-dim);border-radius:2px;margin-bottom:24px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--red)}
-.graph-visual{position:relative;height:400px}
-.node{position:absolute;width:10px;height:10px;background:var(--accent);border-radius:50%;box-shadow:0 0 20px rgba(0,224,160,.3)}
-.node::after{content:attr(data-label);position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--muted);white-space:nowrap}
-.edge{position:absolute;height:1px;background:linear-gradient(90deg,rgba(0,224,160,.2),rgba(0,224,160,.05));transform-origin:left center}
+/* ===== GRAPH THEORY ===== */
+.graph-section{position:relative;overflow:hidden}
+.graph-layout{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+.graph-text{max-width:460px}
+.graph-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--red-dim);background:var(--red-dim);border-radius:2px;margin-bottom:20px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--red)}
+#graph-viz{width:100%;height:420px;position:relative;border:1px solid var(--border);background:rgba(0,0,0,.3)}
 
-/* ========== CAPABILITIES ========== */
-.cap-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:80px;background:var(--border)}
-.cap-card{background:var(--black);padding:48px 36px;position:relative;transition:all .5s}
-.cap-card:hover{background:var(--surface)}
-.cap-icon{width:40px;height:40px;margin-bottom:24px;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);color:var(--accent);transition:all .3s}
-.cap-card:hover .cap-icon{border-color:var(--accent);box-shadow:0 0 20px rgba(0,224,160,.1)}
-.cap-title{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:12px}
-.cap-desc{font-size:13px;line-height:1.7;color:var(--dim)}
+/* ===== VALUE PROPS ===== */
+.value-section{background:var(--deep)}
+.value-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;margin-top:64px;background:var(--border)}
+.value-card{background:var(--black);padding:44px 32px;transition:all .5s}
+.value-card:hover{background:var(--surface)}
+.value-title{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:12px}
+.value-desc{font-size:13px;line-height:1.7;color:var(--dim)}
 
-/* ========== FOOTER ========== */
-footer{padding:80px 0 40px;border-top:1px solid var(--border)}
-.footer-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:80px}
-.footer-brand .footer-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;letter-spacing:4px;color:var(--white);text-transform:uppercase;margin-bottom:12px}
-.footer-brand p{font-size:14px;color:var(--muted);max-width:320px;line-height:1.6}
-.footer-links{display:flex;gap:64px}
-.footer-col h4{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:16px}
-.footer-col a{display:block;font-size:14px;color:var(--muted);text-decoration:none;padding:4px 0;transition:color .3s}
-.footer-col a:hover{color:var(--accent)}
-.footer-bottom{padding-top:40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--ghost);text-transform:uppercase}
+/* ===== FOOTER ===== */
+footer{padding:60px 0 32px;border-top:1px solid var(--border)}
+.footer-inner{display:flex;justify-content:space-between;align-items:start;margin-bottom:60px}
+.footer-brand .f-logo{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;letter-spacing:4px;color:var(--white);text-transform:uppercase;margin-bottom:10px}
+.footer-brand p{font-size:13px;color:var(--muted);max-width:300px;line-height:1.6}
+.footer-links{display:flex;gap:56px}
+.f-col h4{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--dim);margin-bottom:14px}
+.f-col a{display:block;font-size:13px;color:var(--muted);text-decoration:none;padding:3px 0;transition:color .3s;cursor:pointer}
+.f-col a:hover{color:var(--accent)}
+.footer-bottom{padding-top:32px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--ghost);text-transform:uppercase}
 
-/* ========== RESPONSIVE ========== */
-@media(max-width:900px){
+/* ===== INNER PAGES ===== */
+.inner-page h1{font-family:'Instrument Serif',serif;font-size:clamp(36px,5vw,60px);color:var(--white);font-weight:400;margin-bottom:12px;line-height:1.1}
+.inner-page h1 .asterisk{color:var(--red);font-family:'JetBrains Mono',monospace}
+.inner-page .page-eyebrow{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--accent);margin-bottom:20px;display:flex;align-items:center;gap:14px}
+.inner-page .page-eyebrow::before{content:'';width:28px;height:1px;background:var(--accent)}
+.inner-page .page-sub{font-size:16px;line-height:1.8;color:var(--dim);max-width:580px;margin-bottom:64px}
+
+.content-block{margin-bottom:80px}
+.content-block h2{font-family:'Instrument Serif',serif;font-size:32px;color:var(--white);font-weight:400;margin-bottom:14px}
+.content-block p{font-size:14px;line-height:1.8;color:var(--dim);max-width:600px;margin-bottom:16px}
+.content-block .highlight{color:var(--accent)}
+
+/* ETHICS HYPERNODE VIZ */
+#hypernode-viz{width:100%;height:360px;border:1px solid var(--border);background:rgba(0,0,0,.3);margin-top:32px;margin-bottom:16px;position:relative}
+.viz-caption{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;text-align:center}
+
+/* ABOUT PAGE */
+.about-card{border:1px solid var(--border);padding:48px;margin-bottom:48px;background:var(--surface)}
+.about-card h3{font-family:'Instrument Serif',serif;font-size:24px;color:var(--white);font-weight:400;margin-bottom:12px}
+.about-card p{font-size:14px;line-height:1.8;color:var(--dim)}
+
+/* CONTACT PAGE */
+.contact-info{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:var(--border);margin-top:48px}
+.contact-item{background:var(--black);padding:40px}
+.contact-item h3{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.contact-item p{font-size:14px;color:var(--dim);line-height:1.6}
+.contact-item a{color:var(--accent);text-decoration:none}
+.contact-item a:hover{text-decoration:underline}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:960px){
+  .side-nav{display:none}
+  #page-home .home-content{margin-left:0}
   .pipeline-flow{flex-direction:column}
   .pipeline-arrow{display:none}
-  .policies,.schema-visual,.cap-grid{grid-template-columns:1fr}
-  .metrics-grid{grid-template-columns:repeat(2,1fr)}
-  .graph-content{grid-template-columns:1fr}
-  .graph-visual{display:none}
-  .footer-top{flex-direction:column;gap:40px}
-  .footer-links{flex-direction:column;gap:32px}
-  nav .nav-links{display:none}
-  nav .status{display:none}
+  .policies-grid,.schema-grid,.value-grid,.contact-info{grid-template-columns:1fr}
+  .graph-layout{grid-template-columns:1fr}
+  #graph-viz{height:300px}
+  .top-nav .page-links{gap:16px}
+  .top-nav .page-links a{font-size:9px;letter-spacing:1px}
+  .footer-inner{flex-direction:column;gap:32px}
+  .footer-links{flex-direction:column;gap:24px}
+}
+@media(max-width:600px){
+  .top-nav{padding:0 16px}
+  .container{padding:0 20px}
+  .inner-page{padding:100px 20px 60px!important}
+  .top-nav .page-links{gap:10px}
 }
 </style>
 </head>
@@ -211,491 +248,805 @@ footer{padding:80px 0 40px;border-top:1px solid var(--border)}
 <div class="grid-bg"></div>
 <div class="scanline"></div>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">
+<!-- ===== TOP NAV ===== -->
+<nav class="top-nav">
+  <a class="logo" onclick="showPage('home')">
     <span class="dot"></span>
     HARPOCRATES
-  </div>
-  <div class="nav-links">
-    <a href="#architecture">Architecture</a>
-    <a href="#policies">Policies</a>
-    <a href="#schema">Schema</a>
-    <a href="#graph">Graph_DF</a>
-  </div>
-  <div class="status">
-    <span class="live"></span>
-    SYSTEM ACTIVE
+  </a>
+  <div class="page-links">
+    <a onclick="showPage('home')" data-page="home" class="active-page">Homepage</a>
+    <a onclick="showPage('about')" data-page="about">About Us</a>
+    <a onclick="showPage('ethics')" data-page="ethics">Ethics* & Purpose</a>
+    <a onclick="showPage('contact')" data-page="contact">Contact</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="container hero-content">
-    <div class="hero-eyebrow reveal">MIT AI Engineering</div>
-    <h1 class="reveal reveal-delay-1">We know<br><em>everything</em><br>about you.</h1>
-    <p class="hero-sub reveal reveal-delay-2">An autonomous intelligence architecture that constructs complete digital identity profiles from publicly available data. Family trees. Career histories. Social graphs. All linked. All persistent.</p>
-    <a href="#architecture" class="hero-cta reveal reveal-delay-3">
-      <span>See the architecture</span>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-    </a>
-  </div>
-</section>
+<!-- ===== SIDE NAV (homepage only) ===== -->
+<nav class="side-nav" id="sideNav">
+  <a class="side-nav-item active" data-target="sec-hero">Overview</a>
+  <a class="side-nav-item" data-target="sec-arch">Architecture</a>
+  <a class="side-nav-item" data-target="sec-policies">Policies</a>
+  <a class="side-nav-item" data-target="sec-schema">Schema</a>
+  <a class="side-nav-item" data-target="sec-graph">Graph Theory</a>
+  <a class="side-nav-item" data-target="sec-value">Why It Works</a>
+</nav>
 
-<!-- THREAT BANNER -->
-<div class="threat-banner">
-  <div class="threat-track">
-    <span>Entity Resolution</span><span>Family Discovery</span><span>Profile Enrichment</span><span>Digital Footprint Mapping</span><span>Relationship Linking</span><span>Idempotent Pipelines</span><span>Social Graph Analysis</span><span>Asset Tracking</span>
-    <span>Entity Resolution</span><span>Family Discovery</span><span>Profile Enrichment</span><span>Digital Footprint Mapping</span><span>Relationship Linking</span><span>Idempotent Pipelines</span><span>Social Graph Analysis</span><span>Asset Tracking</span>
+<!-- ============================================================ -->
+<!-- PAGE: HOME -->
+<!-- ============================================================ -->
+<div class="page active" id="page-home">
+<div class="home-content">
+
+  <!-- HERO -->
+  <section class="full-section hero-section" id="sec-hero">
+    <canvas id="hero-canvas"></canvas>
+    <div class="container hero-inner">
+      <div class="hero-eyebrow reveal">MIT AI Engineering</div>
+      <h1 class="reveal reveal-d1">We know<br><em>everything</em><br>about you.</h1>
+      <p class="hero-sub reveal reveal-d2">An autonomous intelligence system that builds complete identity profiles from publicly available data. Family trees. Career histories. Social graphs. All linked. All growing.</p>
+      <a class="hero-cta reveal reveal-d3" onclick="document.getElementById('sec-arch').scrollIntoView({behavior:'smooth'})">
+        <span>See the architecture</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SCROLLING BANNER -->
+  <div class="scroll-banner">
+    <div class="scroll-track">
+      <span>Entity Resolution</span><span>Family Discovery</span><span>Profile Enrichment</span><span>Digital Footprint Mapping</span><span>Relationship Linking</span><span>Social Graph Analysis</span><span>Webpage Crawling</span><span>Data Structuring</span>
+      <span>Entity Resolution</span><span>Family Discovery</span><span>Profile Enrichment</span><span>Digital Footprint Mapping</span><span>Relationship Linking</span><span>Social Graph Analysis</span><span>Webpage Crawling</span><span>Data Structuring</span>
+    </div>
+  </div>
+
+  <!-- ARCHITECTURE -->
+  <section class="full-section pipeline-section" id="sec-arch">
+    <div class="container">
+      <div class="sec-label reveal">System Architecture</div>
+      <div class="sec-title reveal reveal-d1">Three steps to<br>total knowledge.</div>
+      <div class="sec-desc reveal reveal-d2">A pipeline that turns a single name into a structured, linked intelligence profile — and then keeps going.</div>
+
+      <div class="pipeline-graphic reveal reveal-d3">
+        <div class="data-flow">
+          <div class="data-dot" style="animation-delay:0s"></div>
+          <div class="data-dot" style="animation-delay:.8s"></div>
+          <div class="data-dot" style="animation-delay:1.6s"></div>
+          <div class="data-dot" style="animation-delay:2.4s"></div>
+        </div>
+        <div class="pipeline-flow">
+          <div class="pipeline-step">
+            <div class="step-num">01</div>
+            <div class="step-name">Seed</div>
+            <div class="step-title">Ingest</div>
+            <div class="step-desc">A CSV file. First name, last name, class year. That's all it needs. One row per person. The system takes it from there.</div>
+          </div>
+          <div class="pipeline-step">
+            <div class="step-num">02</div>
+            <div class="step-name">LLM Policy One</div>
+            <div class="step-title">Family Discovery</div>
+            <div class="step-desc">Identifies immediate family members autonomously. Creates shared family records that grow with each pass — siblings, parents, extended connections. Every new run expands the tree outward.</div>
+          </div>
+          <div class="pipeline-step">
+            <div class="step-num">03</div>
+            <div class="step-name">LLM Policy Two</div>
+            <div class="step-title">Profile Enrichment</div>
+            <div class="step-desc">Fills in the details for every person in the family tree. Education, career, affiliations, online accounts — structured and linked. Can run on individuals or entire families at once.</div>
+          </div>
+        </div>
+        <div class="pipeline-arrow arrow-pos-1">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+        <div class="pipeline-arrow arrow-pos-2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POLICIES -->
+  <section class="full-section" id="sec-policies">
+    <div class="container">
+      <div class="sec-label reveal">Intelligence Policies</div>
+      <div class="sec-title reveal reveal-d1">Two policies.<br>No data loss. Ever.</div>
+      <div class="sec-desc reveal reveal-d2">Each policy is designed to be safe to run repeatedly. Same input, same result. Data only grows — nothing gets overwritten or corrupted.</div>
+
+      <div class="policies-grid reveal reveal-d3">
+        <div class="policy-card">
+          <div class="policy-id">LLM Policy One</div>
+          <div class="policy-name">Family Tree Constructor</div>
+          <div class="policy-desc">Takes a name or an existing family record and identifies new family members with confidence scores. When personal data from Policy Two is already available, it finds more connections — that feedback loop is by design.</div>
+          <div class="policy-props">
+            <span class="prop">Safe to re-run</span>
+            <span class="prop">Grows with context</span>
+            <span class="prop">Never overwrites</span>
+          </div>
+        </div>
+        <div class="policy-card">
+          <div class="policy-id">LLM Policy Two</div>
+          <div class="policy-name">Profile Enrichment Engine</div>
+          <div class="policy-desc">Consumes a family record and produces structured personal data. Runs per-person for speed or across entire families for richer context. Shared information — addresses, trusts, assets — automatically links across members.</div>
+          <div class="policy-props">
+            <span class="prop">Two execution modes</span>
+            <span class="prop">Cross-links shared data</span>
+            <span class="prop">Only adds, never deletes</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEMA -->
+  <section class="full-section schema-section" id="sec-schema">
+    <div class="container">
+      <div class="sec-label reveal">Personal Data Schema</div>
+      <div class="sec-title reveal reveal-d1">Everything is<br>a data point.</div>
+      <div class="sec-desc reveal reveal-d2">The schema captures the full scope of a digital identity — from social media accounts to family trusts.</div>
+
+      <div class="schema-grid reveal reveal-d3">
+        <div class="schema-col">
+          <div class="schema-col-head">Identity & Assets</div>
+          <div class="schema-row">Background & early life</div>
+          <div class="schema-row">Household assets</div>
+          <div class="schema-row">Shared trusts</div>
+          <div class="schema-row">Address history</div>
+          <div class="schema-row">Financial indicators</div>
+          <div class="schema-row">Status acquisition path</div>
+        </div>
+        <div class="schema-col">
+          <div class="schema-col-head">Professional & Academic</div>
+          <div class="schema-row">Industry & company</div>
+          <div class="schema-row">Title & salary range</div>
+          <div class="schema-row">Employment history</div>
+          <div class="schema-row">Internships</div>
+          <div class="schema-row">MIT major & classes</div>
+          <div class="schema-row">Research groups & theses</div>
+        </div>
+        <div class="schema-col">
+          <div class="schema-col-head">Digital & Social</div>
+          <div class="schema-row">LinkedIn</div>
+          <div class="schema-row">Instagram & Facebook</div>
+          <div class="schema-row">GitHub</div>
+          <div class="schema-row">Email addresses</div>
+          <div class="schema-row">Organizational affiliations</div>
+          <div class="schema-row">Non-profits & startups</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRAPH THEORY -->
+  <section class="full-section graph-section" id="sec-graph" style="background:var(--deep)">
+    <div class="container">
+      <div class="graph-layout">
+        <div class="graph-text">
+          <div class="graph-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+            In Development
+          </div>
+          <div class="sec-label reveal">Future Architecture</div>
+          <div class="sec-title reveal reveal-d1">Digital Footprint<br>Graph Theory</div>
+          <p class="sec-desc reveal reveal-d2" style="margin-bottom:24px">Every webpage that mentions you is a node. When we extract data from that page and feed it back into the system, it leads us to more pages — those connections are the edges.</p>
+          <p class="dim reveal reveal-d3" style="font-size:14px;line-height:1.8;margin-bottom:24px">One LinkedIn profile leads to a company page, which leads to a press mention, which leads to a university directory. The graph expands with every piece of data we collect. The more pages we find, the more pages we can reach.</p>
+          <p class="reveal reveal-d4" style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);line-height:1.8">Built on top of stable family records<br>and enrichment policies.</p>
+        </div>
+        <div class="reveal reveal-d2">
+          <canvas id="graph-viz"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY IT WORKS -->
+  <section class="full-section value-section" id="sec-value">
+    <div class="container">
+      <div class="sec-label reveal">Why It Works</div>
+      <div class="sec-title reveal reveal-d1">Simple rules,<br>compounding results.</div>
+
+      <div class="value-grid reveal reveal-d2">
+        <div class="value-card">
+          <div class="value-title">Completely Repeatable</div>
+          <div class="value-desc">Run every policy a thousand times on the same person. You get the same result every time. No duplicates, no conflicts, no cleanup.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Data Only Grows</div>
+          <div class="value-desc">Nothing in the system ever gets overwritten or deleted. Every pass adds to what's already there. The profile only gets more complete.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">The More It Knows, The More It Finds</div>
+          <div class="value-desc">Both policies get better with more context. Family discovery finds more people when enrichment data is present. Each cycle makes the whole system smarter.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Public Data Only</div>
+          <div class="value-desc">Every data point comes from publicly available sources. Social media, professional profiles, open directories. Nothing private, nothing scraped behind a login.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Family-Level Linking</div>
+          <div class="value-desc">When one family member's information changes — a new address, a new company — that update flows automatically to everyone in the household who shares it.</div>
+        </div>
+        <div class="value-card">
+          <div class="value-title">Works on Any Population</div>
+          <div class="value-desc">The architecture isn't specific to MIT. Same system, same policies — point it at any group of people and it builds the same structured, linked profiles.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="f-logo">HARPOCRATES</div>
+          <p>Private AI intelligence architecture. Built at MIT. Structured family and personal profiles from publicly available data.</p>
+        </div>
+        <div class="footer-links">
+          <div class="f-col">
+            <h4>Architecture</h4>
+            <a onclick="scrollToSection('sec-arch')">Pipeline</a>
+            <a onclick="scrollToSection('sec-policies')">Policies</a>
+            <a onclick="scrollToSection('sec-schema')">Schema</a>
+            <a onclick="scrollToSection('sec-graph')">Graph Theory</a>
+          </div>
+          <div class="f-col">
+            <h4>Pages</h4>
+            <a onclick="showPage('about')">About Us</a>
+            <a onclick="showPage('ethics')">Ethics* & Purpose</a>
+            <a onclick="showPage('contact')">Contact</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2025 Harpocrates — MIT AI Engineering</span>
+        <span>Private Repository — Architecture Documentation Only</span>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: ABOUT -->
+<!-- ============================================================ -->
+<div class="page" id="page-about">
+  <div class="inner-page">
+    <div class="page-eyebrow">About Us</div>
+    <h1>Building intelligence<br>infrastructure at MIT.</h1>
+    <p class="page-sub">Harpocrates is a private AI agent that constructs structured family and personal profiles using only publicly available data. It was built to demonstrate what's possible — and what's already happening.</p>
+
+    <div class="about-card">
+      <h3>The Project</h3>
+      <p>The system follows a three-step process: start with a list of names, discover family connections, then enrich every person's profile with structured data from public sources. Two LLM-driven policies handle the intelligence work — one for finding family members, one for building detailed personal records. Both are designed to be run repeatedly without breaking anything, and both get smarter the more data they see.</p>
+    </div>
+    <div class="about-card">
+      <h3>The Architecture</h3>
+      <p>At its core, Harpocrates is a modular entity resolution system. Family records serve as the central data structure — shared across family members, linked at the household level, and grown iteratively by each policy pass. The long-term goal is a full graph theory representation of digital footprints, where every webpage is a node and every discovered connection is an edge.</p>
+    </div>
+    <div class="about-card">
+      <h3>Why It Exists</h3>
+      <p>Companies are already building systems like this — often with less transparency and less concern for the people in their databases. Harpocrates exists to make the mechanics of digital profiling legible. If you understand how the system works, you can understand how exposed you are.</p>
+    </div>
   </div>
 </div>
 
-<!-- METRICS -->
-<div class="metrics">
-  <div class="container">
-    <div class="metrics-grid">
-      <div class="metric reveal">
-        <div class="metric-value">∞<span class="unit"></span></div>
-        <div class="metric-label">Recursive Depth</div>
+<!-- ============================================================ -->
+<!-- PAGE: ETHICS* AND PURPOSE -->
+<!-- ============================================================ -->
+<div class="page" id="page-ethics">
+  <div class="inner-page">
+    <div class="page-eyebrow">Ethics &amp; Purpose</div>
+    <h1>Ethics<span class="asterisk">*</span><br>and Purpose</h1>
+    <p class="page-sub">This tool exists to make a point — and to give people the information they need to protect themselves.</p>
+
+    <div class="content-block">
+      <h2>The Problem</h2>
+      <p>Right now, there are companies building highly organized databases of personal information using nothing but publicly available data. They scrape social media, professional networks, public records, and news mentions to construct detailed profiles of individuals and their families. Most of them don't have your best interests in mind.</p>
+      <p>The uncomfortable truth is that this isn't theoretical. It's happening, it's scalable, and most people have no idea how much of their life is already structured in someone else's database.</p>
+    </div>
+
+    <div class="content-block">
+      <h2>The Danger of Public Linking</h2>
+      <p>When a parent posts a photo tagging their child's school, mentions their kid's name in a public comment, or shares a family event linking themselves to their children — they're not just sharing a moment. They're creating a <span class="highlight">permanent, traceable connection</span> between two digital identities.</p>
+      <p>For an LLM agent, these connections are gold. A single post linking a parent to a child can open up an entirely new branch of discoverable information. The child's school leads to a sports roster. The roster leads to a coach. The coach leads to a list of other families. Every public breadcrumb makes the map more complete.</p>
+      <p>This is the real cost of oversharing — not embarrassment, but exposure at a structural level.</p>
+    </div>
+
+    <div class="content-block">
+      <h2>Hypernodes</h2>
+      <p>Not all data points are equal. In the graph representation of someone's digital footprint, certain nodes carry disproportionate weight. We call these <span class="highlight">hypernodes</span> — single pieces of public information that, if they didn't exist, would make large portions of the graph completely unreachable.</p>
+      <p>Think of a LinkedIn profile that connects your full name to your employer, your university, and your location. Remove that one page, and suddenly an LLM agent can't bridge from your professional life to your personal one. The graph falls apart.</p>
+      <p>The purpose of Harpocrates is to identify these hypernodes — to show individuals exactly which pieces of their public presence carry the most structural risk, and to let them make informed decisions about what to keep visible and what to take down.</p>
+
+      <canvas id="hypernode-viz"></canvas>
+      <div class="viz-caption">Removing one hypernode disconnects an entire region of the graph</div>
+    </div>
+
+    <div class="content-block">
+      <h2>The Goal</h2>
+      <p>Harpocrates isn't built to exploit — it's built to expose the mechanics. If people understand how these systems work, they can take control of their own digital footprint instead of leaving it to companies that won't tell them what they've found.</p>
+      <p>Empowerment through transparency. That's the purpose.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PAGE: CONTACT -->
+<!-- ============================================================ -->
+<div class="page" id="page-contact">
+  <div class="inner-page">
+    <div class="page-eyebrow">Contact</div>
+    <h1>Get in touch.</h1>
+    <p class="page-sub">Interested in the project, the architecture, or potential collaboration — reach out directly.</p>
+
+    <div class="contact-info">
+      <div class="contact-item">
+        <h3>Email</h3>
+        <p><a href="mailto:mit_bach@mit.edu">mit_bach@mit.edu</a></p>
       </div>
-      <div class="metric reveal reveal-delay-1">
-        <div class="metric-value">2<span class="unit">x</span></div>
-        <div class="metric-label">LLM Policies</div>
+      <div class="contact-item">
+        <h3>Location</h3>
+        <p>Massachusetts Institute of Technology<br>Cambridge, MA</p>
       </div>
-      <div class="metric reveal reveal-delay-2">
-        <div class="metric-value">17<span class="unit">+</span></div>
-        <div class="metric-label">Data Categories</div>
+      <div class="contact-item">
+        <h3>Repository</h3>
+        <p>Architecture documentation is public: <a href="https://github.com/DomDBomb4Life/Harpocrates_llm" target="_blank">GitHub Repository</a><br>Agent logic is private.</p>
       </div>
-      <div class="metric reveal reveal-delay-3">
-        <div class="metric-value">0<span class="unit">ms</span></div>
-        <div class="metric-label">Side Effects</div>
+      <div class="contact-item">
+        <h3>Inquiries</h3>
+        <p>Open to internship discussions, research collaborations, and investor conversations.</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ARCHITECTURE PIPELINE -->
-<section class="pipeline-section" id="architecture">
-  <div class="container">
-    <div class="section-label reveal">System Architecture</div>
-    <div class="section-title reveal reveal-delay-1">Three steps to<br>total knowledge.</div>
-    <div class="section-desc reveal reveal-delay-2">A deterministic pipeline that transforms a single name into a comprehensive, linked intelligence profile — recursively, idempotently, relentlessly.</div>
-
-    <div class="pipeline-graphic reveal reveal-delay-3">
-      <div class="data-flow">
-        <div class="data-particle" style="animation-delay:0s;top:25%"></div>
-        <div class="data-particle" style="animation-delay:1s;top:50%"></div>
-        <div class="data-particle" style="animation-delay:2s;top:75%"></div>
-        <div class="data-particle" style="animation-delay:.5s;top:40%"></div>
-        <div class="data-particle" style="animation-delay:1.5s;top:60%"></div>
-      </div>
-      <div class="pipeline-flow">
-        <div class="pipeline-step">
-          <div class="step-number">01</div>
-          <div class="step-name">Seed</div>
-          <div class="step-title">Ingest</div>
-          <div class="step-desc">A minimal CSV — first name, last name, class year. That's all the system needs. One row per target. The pipeline consumes the queue and begins resolution.</div>
-        </div>
-        <div class="pipeline-step">
-          <div class="step-number">02</div>
-          <div class="step-name">LLM Policy 1</div>
-          <div class="step-title">Family Discovery</div>
-          <div class="step-desc">Autonomous identification of immediate family members. Creates or merges family_files — shared JSON records keyed by deterministic family_id. Iteratively expands outward with each pass.</div>
-        </div>
-        <div class="pipeline-step">
-          <div class="step-number">03</div>
-          <div class="step-name">LLM Policy 2</div>
-          <div class="step-title">Profile Enrichment</div>
-          <div class="step-desc">Deep enrichment of every individual in the family tree. Assets, education, career, affiliations, internet accounts — structured, linked, and persistent. Per-member or whole-family execution modes.</div>
-        </div>
-      </div>
-      <div class="pipeline-arrow arrow-1">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-      <div class="pipeline-arrow arrow-2">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- POLICIES -->
-<section id="policies">
-  <div class="container">
-    <div class="section-label reveal">Intelligence Policies</div>
-    <div class="section-title reveal reveal-delay-1">Two autonomous policies.<br>Zero data loss.</div>
-    <div class="section-desc reveal reveal-delay-2">Each policy is idempotent, append-only, and context-aware. The more they know, the more they find.</div>
-
-    <div class="policies reveal reveal-delay-3">
-      <div class="policy-card">
-        <div class="policy-id">LLM_Policy_1 → p1</div>
-        <div class="policy-name">Family Tree Constructor</div>
-        <div class="policy-desc">Extracts immediate family members from any input — a bare name or an existing family_file. Produces candidate members with confidence scores. Returns higher recall when personal_data from P2 is available. Strictly append-only: never overwrites, never corrupts.</div>
-        <div class="policy-tags">
-          <span class="tag">Idempotent</span>
-          <span class="tag">Append-Only</span>
-          <span class="tag">Recursive</span>
-          <span class="tag">Context-Aware</span>
-        </div>
-      </div>
-      <div class="policy-card">
-        <div class="policy-id">LLM_Policy_2 → p2</div>
-        <div class="policy-name">Profile Enrichment Engine</div>
-        <div class="policy-desc">Consumes a family_file and outputs structured personal_data deltas. Operates per-member for efficiency or whole-family for maximum context exploitation. Shared-asset linking propagates updates bidirectionally across households.</div>
-        <div class="policy-tags">
-          <span class="tag">Delta-Only</span>
-          <span class="tag">Dual-Mode</span>
-          <span class="tag">Bidirectional</span>
-          <span class="tag">Parallelizable</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- SCHEMA -->
-<section id="schema" style="background:var(--deep)">
-  <div class="container">
-    <div class="section-label reveal">Personal Data Schema</div>
-    <div class="section-title reveal reveal-delay-1">Everything is<br>a data point.</div>
-    <div class="section-desc reveal reveal-delay-2">The personal_data schema captures the full dimensionality of a digital identity — from LinkedIn profiles to family trusts.</div>
-
-    <div class="schema-visual reveal reveal-delay-3">
-      <div class="schema-col">
-        <div class="schema-col-title">Identity & Assets</div>
-        <div class="schema-item">Status acquisition path</div>
-        <div class="schema-item">Early life & background</div>
-        <div class="schema-item">Household assets</div>
-        <div class="schema-item">Shared trusts</div>
-        <div class="schema-item">Address history</div>
-        <div class="schema-item">Financial indicators</div>
-      </div>
-      <div class="schema-col">
-        <div class="schema-col-title">Professional & Academic</div>
-        <div class="schema-item">Industry & company</div>
-        <div class="schema-item">Title & salary range</div>
-        <div class="schema-item">Employment history</div>
-        <div class="schema-item">Internships</div>
-        <div class="schema-item">MIT major & classes</div>
-        <div class="schema-item">Research groups & theses</div>
-      </div>
-      <div class="schema-col">
-        <div class="schema-col-title">Digital & Social</div>
-        <div class="schema-item">LinkedIn</div>
-        <div class="schema-item">Instagram & Facebook</div>
-        <div class="schema-item">GitHub repositories</div>
-        <div class="schema-item">Email addresses</div>
-        <div class="schema-item">Organizational affiliations</div>
-        <div class="schema-item">Non-profits & start-ups</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- GRAPH FUTURE -->
-<section class="graph-section" id="graph">
-  <canvas id="graph-canvas"></canvas>
-  <div class="container">
-    <div class="graph-content">
-      <div class="graph-text">
-        <div class="graph-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
-          In Development
-        </div>
-        <div class="section-label reveal">Future Architecture</div>
-        <div class="section-title reveal reveal-delay-1">Graph_DF</div>
-        <p class="section-desc reveal reveal-delay-2" style="margin-bottom:32px">The end state: a complete graph theory representation of every digital footprint in the dataset. Every person is a node. Every relationship is an edge. Every data point is an attribute. The family_file and relationship_edges are the foundation — Graph_DF is the weapon.</p>
-        <p class="dim reveal reveal-delay-3" style="font-family:'JetBrains Mono',monospace;font-size:12px">Built on stable, idempotent policies.<br>Scales to any population size.<br>Every new data point makes the whole graph smarter.</p>
-      </div>
-      <div class="graph-visual" id="graph-visual">
-        <!-- Populated by JS -->
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CAPABILITIES -->
-<section>
-  <div class="container">
-    <div class="section-label reveal">Core Properties</div>
-    <div class="section-title reveal reveal-delay-1">Engineered for<br>relentless reliability.</div>
-
-    <div class="cap-grid reveal reveal-delay-2">
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v20M2 12h20"/></svg>
-        </div>
-        <div class="cap-title">Idempotent</div>
-        <div class="cap-desc">Run any policy any number of times. Same input, same output. No corruption, no duplication, no side effects.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16v16H4z"/><path d="M9 9h6v6H9z"/></svg>
-        </div>
-        <div class="cap-title">Append-Only</div>
-        <div class="cap-desc">Data only grows. Policies never overwrite, delete, or mutate existing records. The family_file is an immutable ledger.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
-        </div>
-        <div class="cap-title">Context-Amplified</div>
-        <div class="cap-desc">Each policy improves with more data. P1's recall increases when P2's personal_data is present. The system gets smarter with every cycle.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
-        </div>
-        <div class="cap-title">Public Data Only</div>
-        <div class="cap-desc">Every data point sourced exclusively from publicly available records. Social media, professional footprints, open registries.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2v-4M9 21H5a2 2 0 01-2-2v-4"/></svg>
-        </div>
-        <div class="cap-title">Bidirectional Linking</div>
-        <div class="cap-desc">Shared-asset linking propagates updates across households. Relationship edges maintain distinct inverse-aware directionality.</div>
-      </div>
-      <div class="cap-card">
-        <div class="cap-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.66 0 3-4.03 3-9s-1.34-9-3-9m0 18c-1.66 0-3-4.03-3-9s1.34-9 3-9m-9 9a9 9 0 019-9"/></svg>
-        </div>
-        <div class="cap-title">Domain Portable</div>
-        <div class="cap-desc">Architecture is domain-agnostic. Entity resolution and relationship mapping applicable to any population, any dataset, any context.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo">HARPOCRATES</div>
-        <p>Private AI intelligence architecture. Built at MIT. Structured family and personal profiles from publicly available data.</p>
-      </div>
-      <div class="footer-links">
-        <div class="footer-col">
-          <h4>Architecture</h4>
-          <a href="#architecture">Pipeline</a>
-          <a href="#policies">Policies</a>
-          <a href="#schema">Schema</a>
-          <a href="#graph">Graph_DF</a>
-        </div>
-        <div class="footer-col">
-          <h4>Properties</h4>
-          <a href="#">Idempotent</a>
-          <a href="#">Append-Only</a>
-          <a href="#">Public Data</a>
-          <a href="#">Bidirectional</a>
-        </div>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2025 Harpocrates — MIT AI Engineering</span>
-      <span>Private Repository — Architecture Documentation Only</span>
-    </div>
-  </div>
-</footer>
-
+<!-- ============================================================ -->
+<!-- SCRIPTS -->
+<!-- ============================================================ -->
 <script>
-// ========== REVEAL ON SCROLL ==========
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); }});
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ========== HERO PARTICLE CANVAS ==========
-const heroCanvas = document.getElementById('hero-canvas');
-if (heroCanvas) {
-  const ctx = heroCanvas.getContext('2d');
-  let w, h, particles = [], connections = [];
-  
-  function resize() {
-    w = heroCanvas.width = heroCanvas.offsetWidth;
-    h = heroCanvas.height = heroCanvas.offsetHeight;
+// ===== PAGE ROUTING =====
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); });
+  const target = document.getElementById('page-' + id);
+  if (target) {
+    target.classList.add('active');
+    // Re-trigger reveals on the newly shown page
+    setTimeout(() => {
+      target.querySelectorAll('.reveal').forEach(r => revealObserver.observe(r));
+    }, 50);
   }
-  resize();
-  window.addEventListener('resize', resize);
-
-  class Particle {
-    constructor() {
-      this.x = Math.random() * w;
-      this.y = Math.random() * h;
-      this.vx = (Math.random() - 0.5) * 0.4;
-      this.vy = (Math.random() - 0.5) * 0.4;
-      this.r = Math.random() * 2 + 1;
-      this.pulse = Math.random() * Math.PI * 2;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      this.pulse += 0.02;
-      if (this.x < 0 || this.x > w) this.vx *= -1;
-      if (this.y < 0 || this.y > h) this.vy *= -1;
-    }
-    draw() {
-      const alpha = 0.3 + Math.sin(this.pulse) * 0.2;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 224, 160, ${alpha})`;
-      ctx.fill();
-    }
+  // Update top nav active state
+  document.querySelectorAll('.page-links a').forEach(a => a.classList.remove('active-page'));
+  const link = document.querySelector(`.page-links a[data-page="${id}"]`);
+  if (link) link.classList.add('active-page');
+  // Sidebar visibility
+  const sideNav = document.getElementById('sideNav');
+  if (id === 'home') {
+    sideNav.classList.remove('hidden');
+  } else {
+    sideNav.classList.add('hidden');
   }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Deferred canvas init for pages that start hidden
+  if (id === 'ethics') setTimeout(initHypernode, 100);
+}
 
-  for (let i = 0; i < 60; i++) particles.push(new Particle());
+function scrollToSection(id) {
+  showPage('home');
+  setTimeout(() => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  }, 100);
+}
 
-  function animate() {
-    ctx.clearRect(0, 0, w, h);
-    particles.forEach(p => { p.update(); p.draw(); });
-    
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
-          ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0, 224, 160, ${0.08 * (1 - dist / 150)})`;
-          ctx.lineWidth = 0.5;
-          ctx.stroke();
+// ===== REVEAL ON SCROLL =====
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ===== SIDEBAR ACTIVE TRACKING =====
+const sections = document.querySelectorAll('.full-section[id]');
+const sideItems = document.querySelectorAll('.side-nav-item');
+
+const sectionObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sideItems.forEach(item => {
+        if (item.dataset.target === id) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
         }
-      }
+      });
     }
-    requestAnimationFrame(animate);
-  }
-  animate();
-}
-
-// ========== GRAPH CANVAS ==========
-const graphCanvas = document.getElementById('graph-canvas');
-if (graphCanvas) {
-  const gctx = graphCanvas.getContext('2d');
-  let gw, gh, gnodes = [];
-
-  function gresize() {
-    gw = graphCanvas.width = graphCanvas.offsetWidth;
-    gh = graphCanvas.height = graphCanvas.offsetHeight;
-  }
-  gresize();
-  window.addEventListener('resize', gresize);
-
-  class GNode {
-    constructor() {
-      this.x = Math.random() * gw;
-      this.y = Math.random() * gh;
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = (Math.random() - 0.5) * 0.3;
-      this.r = Math.random() * 3 + 1;
-    }
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
-      if (this.x < 0 || this.x > gw) this.vx *= -1;
-      if (this.y < 0 || this.y > gh) this.vy *= -1;
-    }
-    draw() {
-      gctx.beginPath();
-      gctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-      gctx.fillStyle = 'rgba(0, 224, 160, 0.4)';
-      gctx.fill();
-    }
-  }
-
-  for (let i = 0; i < 40; i++) gnodes.push(new GNode());
-
-  function ganimate() {
-    gctx.clearRect(0, 0, gw, gh);
-    gnodes.forEach(n => { n.update(); n.draw(); });
-    for (let i = 0; i < gnodes.length; i++) {
-      for (let j = i + 1; j < gnodes.length; j++) {
-        const dx = gnodes[i].x - gnodes[j].x;
-        const dy = gnodes[i].y - gnodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-          gctx.beginPath();
-          gctx.moveTo(gnodes[i].x, gnodes[i].y);
-          gctx.lineTo(gnodes[j].x, gnodes[j].y);
-          gctx.strokeStyle = `rgba(0, 224, 160, ${0.06 * (1 - dist / 200)})`;
-          gctx.lineWidth = 0.5;
-          gctx.stroke();
-        }
-      }
-    }
-    requestAnimationFrame(ganimate);
-  }
-  ganimate();
-}
-
-// ========== INTERACTIVE GRAPH NODES (visual section) ==========
-const graphVisual = document.getElementById('graph-visual');
-if (graphVisual) {
-  const nodeData = [
-    { label: 'STUDENT', x: 50, y: 45 },
-    { label: 'PARENT_A', x: 25, y: 15 },
-    { label: 'PARENT_B', x: 75, y: 15 },
-    { label: 'SIBLING', x: 80, y: 50 },
-    { label: 'EMPLOYER', x: 15, y: 70 },
-    { label: 'MIT_LAB', x: 50, y: 85 },
-    { label: 'FRIEND', x: 85, y: 80 },
-    { label: 'TRUST', x: 30, y: 30 },
-  ];
-  const edges = [[0,1],[0,2],[0,3],[0,4],[0,5],[0,6],[1,7],[2,7],[1,2],[3,6]];
-
-  nodeData.forEach((n, i) => {
-    const el = document.createElement('div');
-    el.className = 'node';
-    el.dataset.label = n.label;
-    el.style.left = n.x + '%';
-    el.style.top = n.y + '%';
-    el.style.animationDelay = (i * 0.15) + 's';
-    graphVisual.appendChild(el);
   });
+}, { threshold: 0.35, rootMargin: '-10% 0px -40% 0px' });
 
-  edges.forEach(([a, b]) => {
-    const na = nodeData[a], nb = nodeData[b];
-    const el = document.createElement('div');
-    el.className = 'edge';
-    const dx = nb.x - na.x, dy = nb.y - na.y;
-    const len = Math.sqrt(dx * dx + dy * dy);
-    const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-    el.style.left = na.x + '%';
-    el.style.top = na.y + '%';
-    el.style.width = len + '%';
-    el.style.transform = `rotate(${angle}deg)`;
-    graphVisual.appendChild(el);
-  });
-}
+sections.forEach(s => sectionObserver.observe(s));
 
-// ========== SMOOTH SCROLL ==========
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    e.preventDefault();
-    const target = document.querySelector(a.getAttribute('href'));
+// Sidebar click to scroll
+sideItems.forEach(item => {
+  item.addEventListener('click', () => {
+    const target = document.getElementById(item.dataset.target);
     if (target) target.scrollIntoView({ behavior: 'smooth' });
   });
 });
 
-// ========== COUNTER ANIMATION ==========
-const metricEls = document.querySelectorAll('.metric-value');
-const metricObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity = '1';
-      e.target.style.transform = 'translateY(0)';
+// ===== HERO PARTICLE CANVAS =====
+(function() {
+  const c = document.getElementById('hero-canvas');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  let w, h, particles = [];
+  function resize() { w = c.width = c.offsetWidth; h = c.height = c.offsetHeight; }
+  resize(); window.addEventListener('resize', resize);
+
+  class P {
+    constructor() {
+      this.x = Math.random() * w; this.y = Math.random() * h;
+      this.vx = (Math.random() - .5) * .35; this.vy = (Math.random() - .5) * .35;
+      this.r = Math.random() * 1.8 + .8; this.phase = Math.random() * Math.PI * 2;
     }
-  });
-}, { threshold: 0.5 });
-metricEls.forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'all 0.6s cubic-bezier(.16,1,.3,1)';
-  metricObserver.observe(el);
-});
+    update() {
+      this.x += this.vx; this.y += this.vy; this.phase += .015;
+      if (this.x < 0 || this.x > w) this.vx *= -1;
+      if (this.y < 0 || this.y > h) this.vy *= -1;
+    }
+    draw() {
+      const a = .25 + Math.sin(this.phase) * .15;
+      ctx.beginPath(); ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,224,160,${a})`; ctx.fill();
+    }
+  }
+  for (let i = 0; i < 50; i++) particles.push(new P());
+
+  function loop() {
+    ctx.clearRect(0, 0, w, h);
+    particles.forEach(p => { p.update(); p.draw(); });
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x, dy = particles[i].y - particles[j].y;
+        const d = Math.sqrt(dx * dx + dy * dy);
+        if (d < 130) {
+          ctx.beginPath(); ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(0,224,160,${.07 * (1 - d / 130)})`;
+          ctx.lineWidth = .5; ctx.stroke();
+        }
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+})();
+
+// ===== GRAPH THEORY VISUALIZATION =====
+(function() {
+  const c = document.getElementById('graph-viz');
+  if (!c) return;
+  const ctx = c.getContext('2d');
+  let w, h;
+  function resize() {
+    const rect = c.parentElement.getBoundingClientRect();
+    w = c.width = rect.width;
+    h = c.height = 420;
+    c.style.width = w + 'px';
+    c.style.height = h + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Nodes represent webpages; edges represent discovered connections
+  const labels = [
+    'LinkedIn Profile', 'Company Page', 'University Directory',
+    'News Mention', 'GitHub', 'Conference Talk',
+    'Startup Page', 'Blog Post', 'Patent Filing',
+    'Social Media', 'Alumni Network', 'Research Paper'
+  ];
+
+  class Node {
+    constructor(x, y, label, depth, delay) {
+      this.x = x; this.y = y; this.label = label;
+      this.depth = depth; this.delay = delay;
+      this.r = depth === 0 ? 6 : depth === 1 ? 4 : 3;
+      this.visible = 0; // 0-1 fade
+      this.pulse = Math.random() * Math.PI * 2;
+    }
+  }
+
+  class Edge {
+    constructor(from, to, delay) {
+      this.from = from; this.to = to; this.delay = delay;
+      this.progress = 0; // 0-1 draw progress
+    }
+  }
+
+  const cx = w * .5, cy = h * .5;
+  const nodes = [];
+  const edges = [];
+  const totalCycle = 10; // seconds per animation cycle
+
+  // Layer 0: seed
+  nodes.push(new Node(cx, cy, labels[0], 0, 0));
+
+  // Layer 1: first discoveries
+  const l1Count = 4;
+  for (let i = 0; i < l1Count; i++) {
+    const angle = (i / l1Count) * Math.PI * 2 - Math.PI / 2;
+    const dist = 110;
+    nodes.push(new Node(cx + Math.cos(angle) * dist, cy + Math.sin(angle) * dist, labels[i + 1], 1, 1.5));
+    edges.push(new Edge(0, nodes.length - 1, 1));
+  }
+
+  // Layer 2: second discoveries
+  const l2Offsets = [
+    [1, -0.9], [1, 0.9], [2, -0.9], [2, 0.9],
+    [3, -0.9], [3, 0.9], [4, -0.9], [4, 0.9]
+  ];
+  let li = 5;
+  for (const [parentIdx, angleOff] of l2Offsets) {
+    if (li >= labels.length) break;
+    const parent = nodes[parentIdx];
+    const baseAngle = Math.atan2(parent.y - cy, parent.x - cx);
+    const angle = baseAngle + angleOff;
+    const dist = 80;
+    nodes.push(new Node(parent.x + Math.cos(angle) * dist, parent.y + Math.sin(angle) * dist, labels[li], 2, 3.5));
+    edges.push(new Edge(parentIdx, nodes.length - 1, 3));
+    li++;
+  }
+
+  let startTime = performance.now();
+
+  function draw(now) {
+    ctx.clearRect(0, 0, w, h);
+    const elapsed = ((now - startTime) / 1000) % totalCycle;
+
+    // Update visibility
+    nodes.forEach(n => {
+      if (elapsed > n.delay) {
+        n.visible = Math.min(1, (elapsed - n.delay) / .6);
+      } else {
+        n.visible = 0;
+      }
+      n.pulse += .02;
+    });
+
+    edges.forEach(e => {
+      if (elapsed > e.delay) {
+        e.progress = Math.min(1, (elapsed - e.delay) / .5);
+      } else {
+        e.progress = 0;
+      }
+    });
+
+    // Fade out at end of cycle
+    const fadeOut = elapsed > totalCycle - 1.5 ? Math.max(0, (totalCycle - elapsed) / 1.5) : 1;
+
+    // Draw edges
+    edges.forEach(e => {
+      if (e.progress <= 0) return;
+      const from = nodes[e.from], to = nodes[e.to];
+      const tx = from.x + (to.x - from.x) * e.progress;
+      const ty = from.y + (to.y - from.y) * e.progress;
+      ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.lineTo(tx, ty);
+      ctx.strokeStyle = `rgba(0,224,160,${.25 * e.progress * fadeOut})`;
+      ctx.lineWidth = 1; ctx.stroke();
+    });
+
+    // Draw nodes
+    nodes.forEach(n => {
+      if (n.visible <= 0) return;
+      const alpha = n.visible * fadeOut;
+      const glow = .2 + Math.sin(n.pulse) * .1;
+
+      // Glow
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r + 8, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,224,160,${glow * alpha * .3})`; ctx.fill();
+
+      // Core
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(0,224,160,${.7 * alpha})`; ctx.fill();
+
+      // Label
+      if (alpha > .3) {
+        ctx.font = '9px "JetBrains Mono", monospace';
+        ctx.fillStyle = `rgba(136,136,160,${alpha * .8})`;
+        ctx.textAlign = 'center';
+        ctx.fillText(n.label, n.x, n.y - n.r - 8);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+
+// ===== HYPERNODE VISUALIZATION =====
+// Deferred init — canvas is on a hidden page at load
+let hypernodeInitialized = false;
+function initHypernode() {
+  if (hypernodeInitialized) return;
+  const c = document.getElementById('hypernode-viz');
+  if (!c || c.offsetWidth === 0) return;
+  hypernodeInitialized = true;
+  const ctx = c.getContext('2d');
+  let w, h;
+  function resize() {
+    w = c.width = c.offsetWidth;
+    h = c.height = 360;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Build a graph where one node (the hypernode) is a bridge
+  // Left cluster connects to right cluster only through the hypernode
+  const nodeCount = 22;
+  const hn = {x: w * .5, y: h * .5}; // hypernode at center
+  const allNodes = [];
+  const allEdges = [];
+
+  // Left cluster
+  const leftNodes = [];
+  for (let i = 0; i < 8; i++) {
+    const angle = Math.PI + (Math.random() - .5) * 2.2;
+    const dist = 60 + Math.random() * 80;
+    leftNodes.push({ x: hn.x + Math.cos(angle) * dist, y: hn.y + Math.sin(angle) * dist, cluster: 'left' });
+  }
+  // Right cluster
+  const rightNodes = [];
+  for (let i = 0; i < 8; i++) {
+    const angle = (Math.random() - .5) * 2.2;
+    const dist = 60 + Math.random() * 80;
+    rightNodes.push({ x: hn.x + Math.cos(angle) * dist, y: hn.y + Math.sin(angle) * dist, cluster: 'right' });
+  }
+  // Scattered extras connected to clusters
+  const extras = [];
+  for (let i = 0; i < 4; i++) {
+    const side = i < 2 ? 'left' : 'right';
+    const base = side === 'left' ? leftNodes[Math.floor(Math.random() * leftNodes.length)] : rightNodes[Math.floor(Math.random() * rightNodes.length)];
+    const angle = Math.random() * Math.PI * 2;
+    extras.push({ x: base.x + Math.cos(angle) * 40, y: base.y + Math.sin(angle) * 40, cluster: side });
+  }
+
+  allNodes.push({ ...hn, cluster: 'hyper', r: 7 }); // index 0 = hypernode
+  leftNodes.forEach(n => allNodes.push({ ...n, r: 3 }));
+  rightNodes.forEach(n => allNodes.push({ ...n, r: 3 }));
+  extras.forEach(n => allNodes.push({ ...n, r: 2.5 }));
+
+  // Edges within left cluster
+  for (let i = 1; i <= 8; i++) {
+    for (let j = i + 1; j <= 8; j++) {
+      const dx = allNodes[i].x - allNodes[j].x, dy = allNodes[i].y - allNodes[j].y;
+      if (Math.sqrt(dx * dx + dy * dy) < 100) allEdges.push([i, j, 'left']);
+    }
+    allEdges.push([0, i, 'bridge']); // connect some to hypernode
+  }
+  // Only connect a couple from left to hypernode
+  allEdges.length = 0; // reset and do it properly
+  // Left internal
+  for (let i = 1; i <= 8; i++) {
+    for (let j = i + 1; j <= 8; j++) {
+      const dx = allNodes[i].x - allNodes[j].x, dy = allNodes[i].y - allNodes[j].y;
+      if (Math.sqrt(dx * dx + dy * dy) < 110) allEdges.push([i, j, 'left']);
+    }
+  }
+  // Right internal
+  for (let i = 9; i <= 16; i++) {
+    for (let j = i + 1; j <= 16; j++) {
+      const dx = allNodes[i].x - allNodes[j].x, dy = allNodes[i].y - allNodes[j].y;
+      if (Math.sqrt(dx * dx + dy * dy) < 110) allEdges.push([i, j, 'right']);
+    }
+  }
+  // Extras
+  for (let i = 17; i < allNodes.length; i++) {
+    const base = allNodes[i].cluster === 'left' ? [1,2,3,4,5,6,7,8] : [9,10,11,12,13,14,15,16];
+    allEdges.push([i, base[Math.floor(Math.random() * base.length)], allNodes[i].cluster]);
+  }
+  // Bridge edges: ONLY through hypernode
+  allEdges.push([0, 2, 'bridge']);
+  allEdges.push([0, 4, 'bridge']);
+  allEdges.push([0, 6, 'bridge']);
+  allEdges.push([0, 10, 'bridge']);
+  allEdges.push([0, 12, 'bridge']);
+  allEdges.push([0, 14, 'bridge']);
+
+  const cycleDuration = 7; // seconds
+  let start = performance.now();
+
+  function draw(now) {
+    ctx.clearRect(0, 0, w, h);
+    const t = ((now - start) / 1000) % cycleDuration;
+
+    // Phase 1 (0-3s): full graph visible
+    // Phase 2 (3-4s): hypernode pulses red
+    // Phase 3 (4-5.5s): hypernode removed, right cluster fades
+    // Phase 4 (5.5-7s): fade everything, reset
+
+    let hypernodeAlpha = 1;
+    let rightFade = 1;
+    let bridgeFade = 1;
+    let isRed = false;
+
+    if (t < 3) {
+      // Full graph
+    } else if (t < 4) {
+      // Hypernode pulses red
+      isRed = true;
+      hypernodeAlpha = .6 + Math.sin((t - 3) * Math.PI * 4) * .4;
+    } else if (t < 5.5) {
+      // Remove hypernode, fade right cluster
+      const p = (t - 4) / 1.5;
+      hypernodeAlpha = Math.max(0, 1 - p * 2);
+      rightFade = Math.max(0, 1 - p);
+      bridgeFade = Math.max(0, 1 - p * 2);
+    } else {
+      // Reset fade
+      const p = (t - 5.5) / 1.5;
+      const globalFade = 1 - p;
+      hypernodeAlpha = 0;
+      rightFade = 0;
+      bridgeFade = 0;
+      // Fade everything back in during last bit
+      if (p > .5) {
+        const rebirth = (p - .5) / .5;
+        hypernodeAlpha = rebirth;
+        rightFade = rebirth;
+        bridgeFade = rebirth;
+        isRed = false;
+      }
+    }
+
+    // Draw edges
+    allEdges.forEach(([a, b, type]) => {
+      let alpha = .15;
+      if (type === 'bridge') alpha *= bridgeFade;
+      else if (type === 'right') alpha *= rightFade;
+      if (alpha < .01) return;
+      ctx.beginPath();
+      ctx.moveTo(allNodes[a].x, allNodes[a].y);
+      ctx.lineTo(allNodes[b].x, allNodes[b].y);
+      ctx.strokeStyle = type === 'bridge'
+        ? `rgba(255,51,85,${alpha * 1.5})`
+        : `rgba(0,224,160,${alpha})`;
+      ctx.lineWidth = type === 'bridge' ? 1.2 : .7;
+      ctx.stroke();
+    });
+
+    // Draw nodes
+    allNodes.forEach((n, i) => {
+      let alpha = 1;
+      let color = '0,224,160';
+      if (i === 0) {
+        alpha = hypernodeAlpha;
+        if (isRed) color = '255,51,85';
+      } else if (n.cluster === 'right') {
+        alpha = rightFade;
+      }
+      if (alpha < .02) return;
+
+      // Glow
+      if (i === 0) {
+        ctx.beginPath(); ctx.arc(n.x, n.y, 18, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${color},${alpha * .12})`; ctx.fill();
+      }
+
+      ctx.beginPath(); ctx.arc(n.x, n.y, n.r || 3, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${color},${alpha * .7})`;
+      ctx.fill();
+
+      if (i === 0 && alpha > .3) {
+        ctx.font = '10px "JetBrains Mono", monospace';
+        ctx.fillStyle = `rgba(${color},${alpha * .9})`;
+        ctx.textAlign = 'center';
+        ctx.fillText('HYPERNODE', n.x, n.y - 18);
+      }
+    });
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
 </script>
 </body>
 </html>
